@@ -60,7 +60,7 @@
         },
         "alwaysOn": {
             "type": "Bool",
-            "defaultValue": false
+            "defaultValue": true
         }
     },
     "variables": {
