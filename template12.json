@@ -104,7 +104,7 @@
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference('microsoft.insights/components/durablelab01fa', '2015-05-01').ConnectionString]"
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name')), '2015-05-01').connectionString]"
                         },
                         {
                             "name": "AzureWebJobsStorage",
