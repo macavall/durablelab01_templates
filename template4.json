@@ -4,7 +4,7 @@
     "parameters": {
         "name": {
             "type": "string",
-            "defaultValue": "[concat('durablelab01', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('durablelab01', take(uniqueString(resourceGroup().id), 4))]"
         },
         "location": {
             "type": "string",
@@ -48,7 +48,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[concat('durablelab01', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('durablelab01', take(uniqueString(resourceGroup().id), 4))]"
         },
         "serverFarmResourceGroup": {
             "type": "string",
