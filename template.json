@@ -31,25 +31,32 @@
             "defaultValue": "DOTNET-ISOLATED|8.0"
         },
         "sku": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "PremiumV3"
         },
         "skuCode": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "P1V3"
         },
         "workerSize": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "6"
         },
         "workerSizeId": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "1"
         },
         "numberOfWorkers": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "1"
         },
         "hostingPlanName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('tempName'), uniqueString(resourceGroup().id))]"
         },
         "serverFarmResourceGroup": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
         },
         "alwaysOn": {
             "type": "Bool"
