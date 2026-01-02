@@ -4,7 +4,7 @@
     "parameters": {
         "name": {
             "type": "string",
-            "defaultValue": "[variables('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('durablelab01', uniqueString(resourceGroup().id))]"
         },
         "location": {
             "type": "string",
@@ -20,7 +20,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "[concat(variables('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('durablelab01', uniqueString(resourceGroup().id))]"
         },
         "linuxFxVersion": {
             "type": "string",
@@ -48,7 +48,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[concat(variables('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('durablelab01', uniqueString(resourceGroup().id))]"
         },
         "serverFarmResourceGroup": {
             "type": "string",
