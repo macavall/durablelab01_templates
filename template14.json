@@ -15,7 +15,7 @@
             "defaultValue": "westus2"
         },
         "use32BitWorkerProcess": {
-            "type": "Bool",
+            "type": "bool",
             "defaultValue": false
         },
         "ftpsState": {
@@ -36,7 +36,7 @@
         },
         "skuCode": {
             "type": "string",
-            "defaultValue": "P1V3"
+            "defaultValue": "P1v3"
         },
         "workerSize": {
             "type": "string",
@@ -59,29 +59,104 @@
             "defaultValue": "[resourceGroup().name]"
         },
         "alwaysOn": {
-            "type": "Bool",
+            "type": "bool",
             "defaultValue": true
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string",
+            "defaultValue": "[concat('law-', take(uniqueString(resourceGroup().id), 8))]"
         }
     },
-    "variables": {
-        "tempName": "durabletest01"
-    },
+    "variables": {},
     "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2022-10-01",
+            "name": "[parameters('logAnalyticsWorkspaceName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "SecurityControl": "Ignore"
+            },
+            "properties": {
+                "retentionInDays": 30,
+                "sku": {
+                    "name": "PerGB2018"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('hostingPlanName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "SecurityControl": "Ignore"
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            },
+            "kind": "linux",
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]",
+                "reserved": true,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "SecurityControl": "Ignore"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": true,
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+            ],
+            "tags": {
+                "SecurityControl": "Ignore"
+            },
+            "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+            }
+        },
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('name')]",
             "location": "[parameters('location')]",
+            "kind": "functionapp,linux",
             "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', parameters('name'))]",
+                "[resourceId('microsoft.insights/components', parameters('name'))]",
                 "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
             ],
             "tags": {
-                "SecurityControl": "Ignore",
-                "hidden-link: /app-insights-resource-id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/durablelab01rg/providers/Microsoft.Insights/components/', parameters('name'))]"
+                "SecurityControl": "Ignore"
             },
-            "kind": "functionapp,linux",
             "properties": {
                 "name": "[parameters('name')]",
                 "siteConfig": {
@@ -104,11 +179,11 @@
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name')), '2015-05-01').connectionString]"
+                            "value": "[reference(resourceId('microsoft.insights/components', parameters('name')), '2020-02-02').ConnectionString]"
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value, ';EndpointSuffix=core.windows.net')]"
                         }
                     ],
                     "cors": {
@@ -126,13 +201,13 @@
                 "functionsRuntimeAdminIsolationEnabled": false,
                 "publicNetworkAccess": "Enabled",
                 "httpsOnly": true,
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
             },
             "resources": [
                 {
-                    "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+                    "type": "basicPublishingCredentialsPolicies",
                     "apiVersion": "2022-09-01",
-                    "name": "[concat(parameters('name'), '/scm')]",
+                    "name": "scm",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
                     ],
@@ -141,9 +216,9 @@
                     }
                 },
                 {
-                    "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+                    "type": "basicPublishingCredentialsPolicies",
                     "apiVersion": "2022-09-01",
-                    "name": "[concat(parameters('name'), '/ftp')]",
+                    "name": "ftp",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
                     ],
@@ -152,68 +227,6 @@
                     }
                 }
             ]
-        },
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2024-11-01",
-            "name": "[parameters('hostingPlanName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [],
-            "tags": {
-                "SecurityControl": "Ignore"
-            },
-            "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
-            },
-            "kind": "linux",
-            "properties": {
-                "name": "[parameters('hostingPlanName')]",
-                "workerSize": "[parameters('workerSize')]",
-                "workerSizeId": "[parameters('workerSizeId')]",
-                "numberOfWorkers": "[parameters('numberOfWorkers')]",
-                "reserved": true,
-                "zoneRedundant": false
-            }
-        },
-        {
-            "type": "microsoft.insights/components",
-            "apiVersion": "2020-02-02-preview",
-            "name": "[parameters('name')]",
-            "location": "westus2",
-            "dependsOn": [],
-            "tags": {
-                "SecurityControl": "Ignore"
-            },
-            "properties": {
-                "ApplicationId": "[parameters('name')]",
-                "Request_Source": "IbizaWebAppExtensionCreate",
-                "Flow_Type": "Redfield",
-                "Application_Type": "web",
-                "WorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/DefaultResourceGroup-', parameters('location'), '/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-', subscription().subscriptionId, '-', parameters('location'))]",
-                "DisableLocalAuth": false
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-05-01",
-            "name": "[parameters('storageAccountName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [],
-            "tags": {
-                "SecurityControl": "Ignore"
-            },
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "properties": {
-                "supportsHttpsTrafficOnly": true,
-                "minimumTlsVersion": "TLS1_2",
-                "defaultToOAuthAuthentication": true,
-                "allowBlobPublicAccess": false,
-                "allowSharedKeyAccess": true,
-                "publicNetworkAccess": "Enabled"
-            }
         }
     ]
 }
