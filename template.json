@@ -11,40 +11,40 @@
             "value": "[parameters('tempName'), uniqueString(resourceGroup().id))]"
         },
         "location": {
-            "type": "String"
+            "type": "string"
         },
         "use32BitWorkerProcess": {
             "type": "Bool"
         },
         "ftpsState": {
-            "type": "String"
+            "type": "string"
         },
         "storageAccountName": {
-            "type": "String"
+            "type": "string"
         },
         "linuxFxVersion": {
-            "type": "String"
+            "type": "string"
         },
         "sku": {
-            "type": "String"
+            "type": "string"
         },
         "skuCode": {
-            "type": "String"
+            "type": "string"
         },
         "workerSize": {
-            "type": "String"
+            "type": "string"
         },
         "workerSizeId": {
-            "type": "String"
+            "type": "string"
         },
         "numberOfWorkers": {
-            "type": "String"
+            "type": "string"
         },
         "hostingPlanName": {
-            "type": "String"
+            "type": "string"
         },
         "serverFarmResourceGroup": {
-            "type": "String"
+            "type": "string"
         },
         "alwaysOn": {
             "type": "Bool"
