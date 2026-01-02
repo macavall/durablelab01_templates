@@ -4,20 +4,23 @@
     "parameters": {
         "tempName":{
             "type": "string",
-            "value": "durabletest01"
+            "defaultValue": "durabletest01"
         },
         "name": {
             "type": "string",
-            "value": "[parameters('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[parameters('tempName'), uniqueString(resourceGroup().id))]"
         },
         "location": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "West US 2"
         },
         "use32BitWorkerProcess": {
-            "type": "Bool"
+            "type": "Bool",
+            "defaultValue": false
         },
         "ftpsState": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "AllAllowed"
         },
         "storageAccountName": {
             "type": "string"
