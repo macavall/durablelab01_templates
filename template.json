@@ -20,7 +20,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "[concat(parameters('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat(variables('tempName'), uniqueString(resourceGroup().id))]"
         },
         "linuxFxVersion": {
             "type": "string",
@@ -48,7 +48,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[concat(parameters('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat(variables('tempName'), uniqueString(resourceGroup().id))]"
         },
         "serverFarmResourceGroup": {
             "type": "string",
