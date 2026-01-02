@@ -2,13 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "tempName":{
-            "type": "string",
-            "defaultValue": "durabletest01"
-        },
         "name": {
             "type": "string",
-            "defaultValue": "[parameters('tempName'), uniqueString(resourceGroup().id))]"
+            "defaultValue": "[variables('tempName'), uniqueString(resourceGroup().id))]"
         },
         "location": {
             "type": "string",
@@ -63,7 +59,9 @@
             "defaultValue": false
         }
     },
-    "variables": {},
+    "variables": {
+        "tempName": "durabletest01"
+    },
     "resources": [
         {
             "type": "Microsoft.Web/sites",
