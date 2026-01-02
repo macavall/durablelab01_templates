@@ -79,7 +79,7 @@
             ],
             "tags": {
                 "SecurityControl": "Ignore",
-                "hidden-link: /app-insights-resource-id": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourceGroups/durablelab01rg/providers/Microsoft.Insights/components/, [parameters('name')] ,')]"
+                "hidden-link: /app-insights-resource-id": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourceGroups/durablelab01rg/providers/Microsoft.Insights/components/, [parameters('name')] , '-', [parameters('location')]"
             },
             "kind": "functionapp,linux",
             "properties": {
