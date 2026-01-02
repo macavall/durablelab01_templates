@@ -59,7 +59,8 @@
             "defaultValue": "[resourceGroup().name]"
         },
         "alwaysOn": {
-            "type": "Bool"
+            "type": "Bool",
+            "defaultValue": false
         }
     },
     "variables": {},
@@ -90,6 +91,10 @@
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
                             "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "https://github.com/macavall/testflex5601/releases/download/funcv1/20260102173208.zip"
                         },
                         {
                             "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
