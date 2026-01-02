@@ -190,7 +190,7 @@
                 "Request_Source": "IbizaWebAppExtensionCreate",
                 "Flow_Type": "Redfield",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/DefaultResourceGroup-WUS2/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-, [subscription().subscriptionId], [parameters('location')]",
+                "WorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/DefaultResourceGroup-WUS2/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-, [subscription().subscriptionId], '-', [parameters('location'))]",
                 "DisableLocalAuth": false
             }
         },
