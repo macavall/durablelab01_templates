@@ -20,7 +20,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "[concat('durablelab01', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('durablelab01', take(uniqueString(resourceGroup().id), 4))]"
         },
         "linuxFxVersion": {
             "type": "string",
