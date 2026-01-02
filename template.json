@@ -27,7 +27,8 @@
             "defaultValue": "[concat(parameters('tempName'), uniqueString(resourceGroup().id))]"
         },
         "linuxFxVersion": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "DOTNET-ISOLATED|8.0"
         },
         "sku": {
             "type": "string"
