@@ -12,7 +12,7 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "West US 2"
+            "defaultValue": "westus2"
         },
         "use32BitWorkerProcess": {
             "type": "Bool",
