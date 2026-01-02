@@ -23,7 +23,8 @@
             "defaultValue": "AllAllowed"
         },
         "storageAccountName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('tempName'), uniqueString(resourceGroup().id))]"
         },
         "linuxFxVersion": {
             "type": "string"
